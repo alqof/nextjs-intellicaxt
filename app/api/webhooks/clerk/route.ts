@@ -1,5 +1,6 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
+import { NextResponse } from "next/server";
 import { clerkClient, WebhookEvent } from '@clerk/nextjs/server'
 import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions'
 
@@ -46,10 +47,8 @@ export async function POST(req: Request) {
     }
 
     // Do something with payload! For this guide, log payload to console
-    // const { id } = evt.data
+    const { id } = evt.data
     const eventType = evt.type
-    // console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
-    // console.log('Webhook payload:', body)
 
     // CREATE
     if (eventType === "user.created") {
@@ -72,7 +71,7 @@ export async function POST(req: Request) {
             });
         }
 
-        return Response.json({message: "OK", user: newUser});
+        return NextResponse.json({message: "OK", user: newUser});
     }
 
     // UPDATE
@@ -86,7 +85,7 @@ export async function POST(req: Request) {
         };
         const updatedUser = await updateUser(id, user);
 
-        return Response.json({message: "OK", user: updatedUser});
+        return NextResponse.json({message: "OK", user: updatedUser});
     }
 
     // DELETE
@@ -94,7 +93,7 @@ export async function POST(req: Request) {
         const { id } = evt.data;
         const deletedUser = await deleteUser(id!);
 
-        return Response.json({message: "OK", user: deletedUser});
+        return NextResponse.json({message: "OK", user: deletedUser});
     }
 
     return new Response('Webhook received', { status: 200 })
