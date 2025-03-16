@@ -39,7 +39,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
         await connectToDatabase();
 
         const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
-        new: true,
+            new: true,
         });
 
         if (!updatedUser) throw new Error("User update failed");
@@ -59,7 +59,7 @@ export async function deleteUser(clerkId: string) {
         const userToDelete = await User.findOne({ clerkId });
 
         if (!userToDelete) {
-        throw new Error("User not found");
+            throw new Error("User not found");
         }
 
         // Delete user
@@ -78,9 +78,9 @@ export async function updateCredits(userId: string, creditFee: number) {
         await connectToDatabase();
 
         const updatedUserCredits = await User.findOneAndUpdate(
-        { _id: userId },
-        { $inc: { creditBalance: creditFee }},
-        { new: true }
+            { _id: userId },
+            { $inc: { creditBalance: creditFee }},
+            { new: true }
         )
 
         if(!updatedUserCredits) throw new Error("User credits update failed");
