@@ -8,6 +8,7 @@ interface MongooseConnection {
 }
 
 let cached: MongooseConnection = (global as any).mongoose
+
 if(!cached) {
     cached = (global as any).mongoose = { 
         conn: null, 
@@ -26,7 +27,6 @@ export const connectToDatabase = async () => {
 }
 
 // const { MONGODB_URI } = process.env;
-
 // export const connectToDatabase = async () => {
 //     try {
 //         const { connection } = await mongoose.connect(MONGODB_URI as string);
