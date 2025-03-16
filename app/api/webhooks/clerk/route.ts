@@ -5,6 +5,7 @@ import { clerkClient, WebhookEvent } from '@clerk/nextjs/server'
 import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions'
 
 export async function POST(req: Request) {
+    console.log("testttt!")
     const SIGNING_SECRET = process.env.SIGNING_SECRET
     if (!SIGNING_SECRET) {
         throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env')
