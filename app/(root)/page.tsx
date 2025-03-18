@@ -6,19 +6,11 @@ import { connectToDatabase } from '@/lib/database/mongoose';
 
 const Home = async ()=>{
     const user = await currentUser()
-    // try {
-    //     console.log("Attempting to connect to MongoDB...");
-    //     await connectToDatabase();
-    //     console.log("Successfully connected to MongoDB!");
-    // } catch (error) {
-    //     console.log(error)
-    // }
     
     return (
         <>
             {/* <header className="flex justify-between items-center p-4 gap-4 h-16">
                 <h1> Home </h1>
-
                 <SignedOut>
                     <SignInButton />
                     <SignUpButton />

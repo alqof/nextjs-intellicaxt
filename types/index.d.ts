@@ -85,10 +85,11 @@ declare type CreateTransactionParams = {
     buyerId: string;
     createdAt: Date;
 };
-declare type TransformationTypeKey = | "restore" | "fill" | "remove" | "recolor" | "removeBackground";
 
 
 // ====== URL QUERY PARAMS ======
+declare type TransformationTypeKey = | "restore" | "fill" | "remove" | "recolor" | "removeBackground";
+
 declare type FormUrlQueryParams = {
     searchParams: string;
     key: string;
