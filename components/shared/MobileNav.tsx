@@ -26,6 +26,7 @@ const MobileNav = () => {
                         <SheetTrigger>
                             <Image src="/assets/icons/menu.svg" alt="menu" width={32} height={32} className="cursor-pointer" />
                         </SheetTrigger>
+
                         <SheetContent className="sheet-content sm:w-64" side="right">
                             <SheetHeader>
                                 <SheetTitle>
@@ -37,9 +38,9 @@ const MobileNav = () => {
                                 {navLinks.map((link) => {
                                     const isActive = link.route === pathname
                                     return (
-                                        <li key={link.route} className={`${isActive && 'gradient-text'} p-18 flex whitespace-nowrap text-dark-700`}>
+                                        <li key={link.route} className={`${isActive ? 'bg-purple-gradient text-white' : 'text-dark-700'} sidebar-nav_element flex font-bold whitespace-nowrap`}>
                                             <Link className="sidebar-link cursor-pointer" href={link.route}>
-                                                <Image src={link.icon} alt="logo" width={24} height={24} />
+                                                <Image src={link.icon} className={`${isActive && 'brightness-200'}`} alt="logo" width={24} height={24} />
                                                 {link.label}
                                             </Link>
                                         </li>

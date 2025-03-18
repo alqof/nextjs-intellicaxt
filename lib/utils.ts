@@ -1,12 +1,14 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import qs from "qs"; //query string
+/* eslint-disable prefer-const */
+/* eslint-disable no-prototype-builtins */
+import { type ClassValue, clsx } from "clsx";
+import qs from "qs";
+import { twMerge } from "tailwind-merge";
+
 import { aspectRatioOptions } from "@/constants";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
-
 
 // ERROR HANDLER
 export const handleError = (error: unknown) => {
@@ -41,7 +43,9 @@ const shimmer = (w: number, h: number) => `
 </svg>`;
 
 const toBase64 = (str: string) =>
-  typeof window === "undefined" ? Buffer.from(str).toString("base64") : window.btoa(str);
+  typeof window === "undefined"
+    ? Buffer.from(str).toString("base64")
+    : window.btoa(str);
 
 export const dataUrl = `data:image/svg+xml;base64,${toBase64(
   shimmer(1000, 1000)
@@ -62,7 +66,10 @@ export const formUrlQuery = ({
 };
 
 // REMOVE KEY FROM QUERY
-export function removeKeysFromQuery({searchParams,keysToRemove}: RemoveUrlQueryParams) {
+export function removeKeysFromQuery({
+  searchParams,
+  keysToRemove,
+}: RemoveUrlQueryParams) {
   const currentUrl = qs.parse(searchParams);
 
   keysToRemove.forEach((key) => {
@@ -88,7 +95,11 @@ export const debounce = (func: (...args: any[]) => void, delay: number) => {
 
 // GE IMAGE SIZE
 export type AspectRatioKey = keyof typeof aspectRatioOptions;
-export const getImageSize = (type: string, image: any, dimension: "width" | "height"): number => {
+export const getImageSize = (
+  type: string,
+  image: any,
+  dimension: "width" | "height"
+): number => {
   if (type === "fill") {
     return (
       aspectRatioOptions[image.aspectRatio as AspectRatioKey]?.[dimension] ||
@@ -130,8 +141,10 @@ export const deepMergeObjects = (obj1: any, obj2: any) => {
   for (let key in obj1) {
     if (obj1.hasOwnProperty(key)) {
       if (
-        obj1[key] && typeof obj1[key] === "object" &&
-        obj2[key] && typeof obj2[key] === "object"
+        obj1[key] &&
+        typeof obj1[key] === "object" &&
+        obj2[key] &&
+        typeof obj2[key] === "object"
       ) {
         output[key] = deepMergeObjects(obj1[key], obj2[key]);
       } else {
