@@ -1,6 +1,7 @@
 "use client"
-import { useState, useTransition } from 'react';
-import { aspectRatioOptions, defaultValues, transformationTypes } from "@/constants"
+
+import { useEffect, useState, useTransition } from 'react';
+import { aspectRatioOptions, creditFee, defaultValues, transformationTypes } from "@/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -14,6 +15,10 @@ import { Value } from '@radix-ui/react-select';
 import { useRouter } from 'next/navigation';
 import { updateCredits } from '@/lib/actions/user.actions';
 import MediaUploader from './MediaUploader';
+import TransformedImage from './TransformedImage';
+import { getCldImageUrl } from 'next-cloudinary';
+import { addImage, updateImage } from '@/lib/actions/image.actions';
+import { InsufficientCreditsModal } from './InsufficientCreditsModal';
 
 
 export const formSchema = z.object({
@@ -24,7 +29,7 @@ export const formSchema = z.object({
     publicId: z.string(),
 })
 
-const TransformationForm = ({type, data=null, action, userId, creditBalance, config = null}: TransformationFormProps) => {
+const TransformationForm = ({type, data=null, action, userId, creditBalance, config=null}: TransformationFormProps) => {
     const transformationType = transformationTypes[type];
     const [image, setImage] = useState(data)
     const [newTransformation, setNewTransformation] = useState<Transformations | null>(null);
@@ -50,9 +55,68 @@ const TransformationForm = ({type, data=null, action, userId, creditBalance, con
         resolver: zodResolver(formSchema),
         defaultValues: initialValues
     })
+    
     // Define a submit handler
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
+        setIsSubmitting(true)
+
+        if(data || image){
+            const transformationUrl = getCldImageUrl({
+                width: image?.width,
+                height: image?.height,
+                src: image?.publicId,
+                ...transformationConfig
+            })
+            const imageData = {
+                title: values.title,
+                publicId: image?.publicId,
+                transformationType: type,
+                width: image?.width,
+                height: image?.height,
+                config: transformationConfig,
+                secureURL: image?.secureURL,
+                transformationURL: transformationUrl,
+                aspectRatio: values.aspectRatio,
+                prompt: values.prompt,
+                color: values.color,
+            }
+
+            if(action==='Add') {
+                try {
+                    const newImage = await addImage({
+                        image: imageData,
+                        userId,
+                        path: '/'
+                    })
+            
+                    if(newImage){
+                        form.reset()
+                        setImage(data)
+                        router.push(`/transformations/${newImage._id}`)
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }else if(action==='Update'){
+                try {
+                    const updatedImage = await updateImage({
+                        image: {
+                            ...imageData,
+                            _id: data._id
+                        },
+                        userId,
+                        path: `/transformations/${data._id}`
+                    })
+          
+                    if(updatedImage){
+                        router.push(`/transformations/${updatedImage._id}`)
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
     }
 
     // Handler
@@ -93,28 +157,22 @@ const TransformationForm = ({type, data=null, action, userId, creditBalance, con
         setNewTransformation(null)
 
         startTransition(async () => {
-            // await updateCredits(userId, creditFee)
+            await updateCredits(userId, creditFee)
         })
     }
+
+    useEffect(()=>{
+        if(image && (type==='restore' || type=='removeBackground')){
+            setNewTransformation(transformationType.config)
+        }
+    }, [image, transformationType.config, type])
   
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                {/* <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                            <FormItem>
-                            <FormLabel> Username </FormLabel>
-                            <FormControl> 
-                                <Input placeholder="shadcn" {...field} /> 
-                            </FormControl>
-                            <FormDescription> This is your public display name. </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> */}
+                {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
+
                 <FormFieldCustom 
                     control={form.control}
                     name="title"
@@ -188,34 +246,25 @@ const TransformationForm = ({type, data=null, action, userId, creditBalance, con
                         )}
                     />
 
-                    {/* <TransformedImage 
+                    <TransformedImage
                         image={image}
                         type={type}
                         title={form.getValues().title}
                         isTransforming={isTransforming}
                         setIsTransforming={setIsTransforming}
                         transformationConfig={transformationConfig}
-                    /> */}
+                    />
                 </div>
 
-            <div className="flex flex-col gap-4">
-                <Button 
-                    type="button"
-                    className="submit-button capitalize"
-                    disabled={isTransforming || newTransformation === null}
-                    onClick={onTransformHandler}
-                >
-                    {isTransforming ? 'Transforming...' : 'Apply Transformation'}
-                </Button>
+                <div className="flex flex-col gap-4">
+                    <Button type="button" className="submit-button capitalize" disabled={isTransforming || newTransformation === null} onClick={onTransformHandler}>
+                        {isTransforming ? 'Transforming...' : 'Apply Transformation'}
+                    </Button>
 
-                <Button 
-                    type="submit"
-                    className="submit-button capitalize"
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? 'Submitting...' : 'Save Image'}
-                </Button>
-            </div>
+                    <Button type="submit" className="submit-button capitalize" disabled={isSubmitting}>
+                        {isSubmitting ? 'Submitting...' : 'Save Image'}
+                    </Button>
+                </div>
 
             </form>
         </Form>
