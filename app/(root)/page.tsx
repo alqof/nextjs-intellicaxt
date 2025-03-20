@@ -1,18 +1,39 @@
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
-import { currentUser } from '@clerk/nextjs/server'
-import React from 'react'
-import { connectToDatabase } from '@/lib/database/mongoose';
+import { Collection } from "@/components/shared/Collection"
+import { navLinks } from "@/constants"
+import { getAllImages } from "@/lib/actions/image.actions"
+import Image from "next/image"
+import Link from "next/link"
 
 
-const Home = async ()=>{
-    const user = await currentUser()
-    
+const Home = async ({searchParams}: SearchParamProps) => {
+    const page = Number(searchParams?.page) || 1;
+    const searchQuery = (searchParams?.query as string) || '';
+    const images = await getAllImages({ page, searchQuery})
+
     return (
         <>
-            <div>
-                {user && <p className='mb-3'> Hello, <span className='font-bold'>{user?.username}</span></p>}
-                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque temporibus quis quisquam similique ipsam pariatur tempora rerum veniam reprehenderit, consequatur error earum velit quos placeat ab commodi sint perspiciatis est, sequi dolores. Dolor, ducimus! Ipsam, nihil a harum ea non consequatur beatae voluptatem ullam? Veniam minima expedita natus. Laboriosam ex, enim aut quo, sequi expedita et cum ipsam dolores dolor, quos omnis iusto repellendus. Quos sit doloribus explicabo quibusdam quasi incidunt cumque quod aperiam, eaque corporis laboriosam ut sunt eos pariatur rerum minus quae nemo aut culpa odit. Animi, eos provident dolores harum commodi id? Illo nihil quia temporibus labore. </p>
-            </div>
+            <section className="home">
+                <h1 className="home-heading"> Unleash Your Creative Vision with Intellicaxt </h1>
+                <ul className="flex-center w-full gap-20">
+                    {navLinks.slice(1, 5).map((link) => (
+                        <Link key={link.route} href={link.route} className="flex-center flex-col gap-2" >
+                            <li className="flex-center w-fit rounded-full bg-white p-4">
+                                <Image src={link.icon} alt="image" width={24} height={24} />
+                            </li>
+                            <p className="p-14-medium text-center text-white"> {link.label} </p>
+                        </Link>
+                    ))}
+                </ul>
+            </section>
+
+            <section className="sm:mt-12">
+                <Collection 
+                    hasSearch={true}
+                    images={images?.data}
+                    totalPages={images?.totalPage}
+                    page={page}
+                />
+            </section>
         </>
     )
 }
