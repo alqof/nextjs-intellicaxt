@@ -13,6 +13,7 @@ export const Search = () => {
     const [query, setQuery] = useState("");
 
     useEffect(() => {
+        console.log(query)
         const delayDebounceFn = setTimeout(() => {
             if(query){
                 const newUrl = formUrlQuery({
@@ -38,7 +39,7 @@ export const Search = () => {
     return (
         <div className="search">
             <Image src="/assets/icons/search.svg" alt="search" width={24} height={24} />
-            <Input className="search-field" placeholder="Search" onChange={(e) => setQuery(e.target.value)} />
+            <Input className="search-field" placeholder="Search" onChange={(e)=>setQuery(e.target.value)} />
         </div>
     );
 };

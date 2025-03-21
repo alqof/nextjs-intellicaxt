@@ -14,12 +14,13 @@ import { Button } from "../ui/button";
 
 
 export const Collection = ({hasSearch=false, images, totalPages=1, page}: {hasSearch?: boolean; images: IImage[]; totalPages?: number; page: number;}) => {
+    console.log(images)
     const router = useRouter();
     const searchParams = useSearchParams();
 
     // PAGINATION HANDLER
     const onPageChange = (action: string) => {
-        const pageValue = action === "next" ? Number(page) + 1 : Number(page) - 1;
+        const pageValue = action==="next" ? Number(page)+1 : Number(page)-1;
         const newUrl = formUrlQuery({
             searchParams: searchParams.toString(),
             key: "page",

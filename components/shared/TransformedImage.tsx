@@ -28,7 +28,7 @@ const TransformedImage = ({image, type, title, isTransforming, setIsTransforming
                     <button className="download-btn cursor-pointer" onClick={downloadHandler}>
                         <Image 
                             src="/assets/icons/download.svg" 
-                            alt="Download" 
+                            alt="Download icon" 
                             width={24} 
                             height={24} 
                             className="pb-[6px] transition delay-100 duration-300 ease-in-out hover:brightness-10 hover:scale-125"
@@ -44,7 +44,7 @@ const TransformedImage = ({image, type, title, isTransforming, setIsTransforming
                             width={getImageSize(type, image, "width")}
                             height={getImageSize(type, image, "height")}
                             src={image?.publicId}
-                            alt={image.title}
+                            alt={title}
                             sizes={"(max-width: 767px) 100vw, 50vw"}
                             placeholder={dataUrl as PlaceholderValue}
                             className="transformed-image"
@@ -57,7 +57,7 @@ const TransformedImage = ({image, type, title, isTransforming, setIsTransforming
 
                         {isTransforming && (
                             <div className="transforming-loader">
-                                <Image src="/assets/icons/spinner.svg" width={50} height={50} alt="spinner"/>
+                                <Image src="/assets/icons/spinner.svg" width={50} height={50} alt="Loading spinner"/>
                                 <p className="text-white/80"> Please wait... </p>
                             </div>
                         )}

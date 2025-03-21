@@ -53,11 +53,7 @@ export const dataUrl = `data:image/svg+xml;base64,${toBase64(
 // ==== End
 
 // FORM URL QUERY
-export const formUrlQuery = ({
-  searchParams,
-  key,
-  value,
-}: FormUrlQueryParams) => {
+export const formUrlQuery = ({searchParams,key,value}: FormUrlQueryParams) => {
   const params = { ...qs.parse(searchParams.toString()), [key]: value };
 
   return `${window.location.pathname}?${qs.stringify(params, {
@@ -66,10 +62,7 @@ export const formUrlQuery = ({
 };
 
 // REMOVE KEY FROM QUERY
-export function removeKeysFromQuery({
-  searchParams,
-  keysToRemove,
-}: RemoveUrlQueryParams) {
+export function removeKeysFromQuery({searchParams,keysToRemove}: RemoveUrlQueryParams) {
   const currentUrl = qs.parse(searchParams);
 
   keysToRemove.forEach((key) => {

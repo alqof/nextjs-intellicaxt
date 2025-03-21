@@ -42,18 +42,24 @@ const TransformationForm = ({type, data=null, action, userId, creditBalance, con
     const initialValues = data && (
         action==='Update'
         ? {
-            title: data?.title,
-            aspectRatio: data?.aspectRatio,
-            color: data?.color,
-            prompt: data?.prompt,
-            publicId: data?.publicId
+            title: data?.title || "", // Ensure controlled input
+            aspectRatio: data?.aspectRatio || "", // Ensure controlled input
+            color: data?.color || "", // Ensure controlled input
+            prompt: data?.prompt || "", // Ensure controlled input
+            publicId: data?.publicId || "" // Ensure controlled input
         } : defaultValues
     )
 
     // Define form
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialValues
+        defaultValues: initialValues || {
+            title: "", // Ensure controlled input
+            aspectRatio: "", // Ensure controlled input
+            color: "", // Ensure controlled input
+            prompt: "", // Ensure controlled input
+            publicId: "" // Ensure controlled input
+        }
     })
     
     // Define a submit handler
@@ -188,7 +194,7 @@ const TransformationForm = ({type, data=null, action, userId, creditBalance, con
                         formLabel="Aspect Ratio"
                         className="w-full"
                         render={({ field }) => (
-                            <Select onValueChange={(value)=>onSelectFieldHandler(value, field.onChange)} value={field.value}>
+                            <Select onValueChange={(value)=>onSelectFieldHandler(value, field.onChange)} value={field.value || ""}>
                                 <SelectTrigger className="select-field">
                                     <SelectValue placeholder="Select size" />
                                 </SelectTrigger>
@@ -212,7 +218,7 @@ const TransformationForm = ({type, data=null, action, userId, creditBalance, con
                             formLabel={type==='remove' ? 'Object to remove' : 'Object to recolor'}
                             className="w-full"
                             render={({ field }) => (
-                                <Input placeholder='type here...' value={field.value} className="input-field" onChange={(e)=>onInputChangeHandler('prompt', e.target.value, type, field.onChange)} />
+                                <Input placeholder='type here...' value={field.value || ""} className="input-field" onChange={(e)=>onInputChangeHandler('prompt', e.target.value, type, field.onChange)} />
                             )}
                         />
             
@@ -223,7 +229,7 @@ const TransformationForm = ({type, data=null, action, userId, creditBalance, con
                                 formLabel="Replacement Color"
                                 className="w-full"
                                 render={({ field }) => (
-                                    <Input placeholder='type here...' value={field.value} className="input-field" onChange={(e)=>onInputChangeHandler('color', e.target.value, 'recolor', field.onChange)} />
+                                    <Input placeholder='type here...' value={field.value || ""} className="input-field" onChange={(e)=>onInputChangeHandler('color', e.target.value, 'recolor', field.onChange)} />
                                 )}
                             />
                         )}
@@ -239,7 +245,7 @@ const TransformationForm = ({type, data=null, action, userId, creditBalance, con
                             <MediaUploader 
                                 onValueChange={field.onChange}
                                 setImage={setImage}
-                                publicId={field.value}
+                                publicId={field.value || ""}
                                 image={image}
                                 type={type}
                             />
