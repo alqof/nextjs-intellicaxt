@@ -35,7 +35,7 @@ export const Collection = ({hasSearch=false, images, totalPages=1, page}: {hasSe
             <div className="collection-heading">
                 <h2 className="h2-bold text-dark-600">Recent Collections</h2>
                 
-                {/* {hasSearch && <Search />} */}
+                {hasSearch && <Search />}
             </div>
 
             {images.length > 0 ? (
