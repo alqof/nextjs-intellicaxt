@@ -5,12 +5,13 @@ import Image from "next/image"
 import Link from "next/link"
 
 interface SearchParamProps {
-    searchParams: { page?: string; query?: string }; // Update type to reflect a plain object
+    searchParams: Promise<{ page?: string; query?: string }>; // Ensure type reflects Promise
 }
 
 const Home = async ({ searchParams }: SearchParamProps) => {
-    const page = Number(searchParams?.page) || 1;
-    const searchQuery = (searchParams?.query as string) || '';
+    const resolvedSearchParams = await searchParams; // Await the Promise to resolve
+    const page = Number(resolvedSearchParams?.page) || 1;
+    const searchQuery = (resolvedSearchParams?.query as string) || '';
     const images = await getAllImages({ page, searchQuery });
 
     return (
