@@ -4,6 +4,9 @@ import { getAllImages } from "@/lib/actions/image.actions"
 import Image from "next/image"
 import Link from "next/link"
 
+interface SearchParamProps {
+    searchParams: Promise<{ page?: string; query?: string }>; // Update type to reflect Promise
+}
 
 const Home = async ({ searchParams }: SearchParamProps) => {
     const resolvedSearchParams = await searchParams;
