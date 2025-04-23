@@ -88,7 +88,7 @@ declare type CreateTransactionParams = {
 
 
 // ====== URL QUERY PARAMS ======
-declare type TransformationTypeKey = | "restore" | "fill" | "remove" | "recolor" | "removeBackground";
+declare type TransformationTypeKey = "restore" | "fill" | "remove" | "recolor" | "removeBackground";
 
 declare type FormUrlQueryParams = {
     searchParams: string;
@@ -105,7 +105,7 @@ declare type RemoveUrlQueryParams = {
     keysToRemove: string[];
 };
 declare type SearchParamProps = {
-    params: Promise<{ id: string; type: TransformationTypeKey }>;
+    params: { id: string; type: TransformationTypeKey };
     searchParams: { [key: string]: string | string[] | undefined };
 };
 declare type TransformationFormProps = {

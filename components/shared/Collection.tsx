@@ -14,7 +14,6 @@ import { Button } from "../ui/button";
 
 
 export const Collection = ({hasSearch=false, images, totalPages=1, page}: {hasSearch?: boolean; images: IImage[]; totalPages?: number; page: number;}) => {
-    console.log(images)
     const router = useRouter();
     const searchParams = useSearchParams();
 

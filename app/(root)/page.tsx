@@ -5,11 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 
 
-const Home = async ({ searchParams }: SearchParamProps) => {
-    const resolvedSearchParams = await searchParams;
-    
-    const page = Number(resolvedSearchParams?.page) || 1;
-    const searchQuery = (resolvedSearchParams?.query as string) || '';
+const Home = async (props: { searchParams?: Promise<{page?:string; query?:string;}> }) => {
+    const searchParams = await props.searchParams;
+    const page = Number(searchParams?.page) || 1;
+    const searchQuery = (searchParams?.query as string) || '';
     const images = await getAllImages({ page, searchQuery });
 
     return (
@@ -39,4 +38,5 @@ const Home = async ({ searchParams }: SearchParamProps) => {
         </>
     );
 };
+
 export default Home
