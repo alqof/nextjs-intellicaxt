@@ -154,19 +154,19 @@ export async function getAllImagesByUserId({currentUserId, page=1, limit=6, sear
             expression += ` AND ${searchQuery}`
         }
 
-        const { resources } = await cloudinary.search.expression(expression).execute();
-        const resourceIds = resources.map((resource: any) => resource.public_id);
+        // const { resources } = await cloudinary.search.expression(expression).execute();
+        // const resourceIds = resources.map((resource: any) => resource.public_id);
 
-        let query = {};
+        // let query = {};
 
-        if(searchQuery) {
-            query = {
-                publicId: {
-                    $in: resourceIds
-                },
-                author: currentUserId
-            }
-        }
+        // if(searchQuery) {
+        //     query = {
+        //         publicId: {
+        //             $in: resourceIds
+        //         },
+        //         author: currentUserId
+        //     }
+        // }
 
         const skipAmount = (Number(page) -1) * limit;
         const images = await populateUser(Image.find({author: currentUserId, 'title': { $regex: searchQuery, $options: 'i' }})).sort({ updatedAt: -1 }).skip(skipAmount).limit(limit);

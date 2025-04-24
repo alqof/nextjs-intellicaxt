@@ -18,7 +18,7 @@ const Home = async (props: { searchParams?: Promise<{page?:string; query?:string
     const currentUserId = currentUser ? (currentUser._id) : null
 
     const images = await getAllImagesByUserId({currentUserId, page, searchQuery});
-    console.log(currentUserId)
+    // console.log(currentUserId)
     // console.log(searchQuery)
     // console.log(images)
 
