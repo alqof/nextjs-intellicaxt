@@ -13,7 +13,6 @@ export const Search = () => {
     const [query, setQuery] = useState("");
 
     useEffect(() => {
-        console.log(query)
         const delayDebounceFn = setTimeout(() => {
             if(query){
                 const newUrl = formUrlQuery({

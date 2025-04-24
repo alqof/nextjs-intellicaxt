@@ -1,22 +1,26 @@
 import { Collection } from "@/components/shared/Collection"
 import { navLinks } from "@/constants"
-import { getAllImages } from "@/lib/actions/image.actions"
+import { getAllImages, getAllImagesByUserId } from "@/lib/actions/image.actions"
 import Image from "next/image"
 import Link from "next/link"
 import { auth } from '@clerk/nextjs/server'
+import { getUserById } from "@/lib/actions/user.actions"
 
 
 const Home = async (props: { searchParams?: Promise<{page?:string; query?:string;}> }) => {
     const searchParams = await props.searchParams;
     const page = Number(searchParams?.page) || 1;
     const searchQuery = (searchParams?.query as string) || '';
-    const images = await getAllImages({ page, searchQuery });
+    // const images = await getAllImages({ page, searchQuery });
+    
+    const { userId } = await auth()
+    const currentUser = userId ? await getUserById(userId) : null
+    const currentUserId = currentUser ? (currentUser._id) : null
 
-    const { userId, redirectToSignIn } = await auth()
-    // if(!userId){
-    //     // return redirectToSignIn()
-    //     // console.log("userId: "+userId)
-    // }
+    const images = await getAllImagesByUserId({currentUserId, page, searchQuery});
+    console.log(currentUserId)
+    // console.log(searchQuery)
+    // console.log(images)
 
     return (
         <>
