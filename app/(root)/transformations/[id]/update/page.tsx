@@ -6,12 +6,13 @@ import { getUserById } from '@/lib/actions/user.actions';
 import { auth } from '@clerk/nextjs/server';
 import React from 'react'
 
-const TransformationUpdatePage = async ({params:{id}}: SearchParamProps) => {
+const TransformationUpdatePage = async (props: {params?: Promise<{id?: string}>}) => {
     const { userId, redirectToSignIn } = await auth()
     if (!userId) return redirectToSignIn()
 
+    const searchParams = await props.params;
     const user = await getUserById(userId);
-    const image = await getImageById(id);
+    const image = await getImageById(searchParams?.id as string) || '';
     const transformation = transformationTypes[image.transformationType as TransformationTypeKey];
 
     return (

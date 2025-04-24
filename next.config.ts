@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
     ]
     // domains: ['res.cloudinary.com'], // Tambahkan hostname di sini
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

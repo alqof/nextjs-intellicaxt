@@ -7,11 +7,14 @@ import { getImageSize } from '@/lib/utils';
 import { auth } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react'
+import React from 'react';
 
-const TransformationPageById = async ({params:{id}}: SearchParamProps) => {
+
+const TransformationPageById = async (props: {params?: Promise<{id?: string}>}) => {
     const { userId } = await auth();
-    const image = await getImageById(id);
+
+    const searchParams = await props.params;
+    const image = await getImageById(searchParams?.id as string) || '';
 
     return (
         <>
@@ -84,5 +87,4 @@ const TransformationPageById = async ({params:{id}}: SearchParamProps) => {
         </>
     );
 }
-
-export default TransformationPageById
+export default TransformationPageById;

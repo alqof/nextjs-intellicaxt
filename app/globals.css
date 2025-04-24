@@ -206,10 +206,10 @@
 }
 @utility home {
   /* Home Page */
-  @apply sm:flex-center hidden h-72 flex-col gap-4 rounded-[20px] border bg-banner bg-cover bg-no-repeat p-10 shadow-inner;
+  @apply w-full p-10 rounded-[20px] border bg-banner bg-cover bg-center bg-no-repeat shadow-inner;
 }
 @utility home-heading {
-  @apply h1-semibold max-w-[500px] flex-wrap text-center text-white shadow-xs;
+  @apply w-full mb-8 flex-wrap h1-semibold text-center text-white;
 }
 @utility credits-list {
   /* Credits Page */

@@ -91,7 +91,7 @@ export async function getImageById(imageId: string) {
 }
 
 // GET ALL IMAGES
-export async function getAllImages({page=1, limit=9, searchQuery=''}: {page: number; limit?: number; searchQuery?: string;}) {
+export async function getAllImages({page=1, limit=6, searchQuery=''}: {page: number; limit?: number; searchQuery?: string;}) {
     try {
         await connectToDatabase();
 
